@@ -1,0 +1,75 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Match {
+  createdAt DateTime         @default(now())
+  id        String           @id @default(cuid())
+  status    EnumMatchStatus?
+  updatedAt DateTime         @updatedAt
+  user1     String?
+  user2     String?
+}
+
+model Notification {
+  createdAt DateTime                @default(now())
+  id        String                  @id @default(cuid())
+  message   String?
+  status    EnumNotificationStatus?
+  updatedAt DateTime                @updatedAt
+  user      User?                   @relation(fields: [userId], references: [id])
+  userId    String?
+}
+
+model User {
+  createdAt     DateTime       @default(now())
+  email         String?        @unique
+  firstName     String?
+  id            String         @id @default(cuid())
+  lastName      String?
+  notifications Notification[]
+  password      String
+  roles         Json
+  updatedAt     DateTime       @updatedAt
+  username      String         @unique
+}
+
+model Implementor {
+  availability          String?
+  communicationChannels String?
+  compensation          Int?
+  createdAt             DateTime @default(now())
+  email                 String?
+  expectations          String?
+  experience            String?
+  fullName              String?
+  id                    String   @id @default(cuid())
+  onlineProfiles        String?
+  phone                 Int?
+  portfolio             String?
+  projectPreferences    String?
+  skills                String?
+  updatedAt             DateTime @updatedAt
+}
+
+model Innovator {
+  createdAt          DateTime @default(now())
+  id                 String   @id @default(cuid())
+  projectDescription String?
+  projectName        String?
+  skillsNeeded       String?
+  updatedAt          DateTime @updatedAt
+}
+
+enum EnumMatchStatus {
+  Option1
+}
+
+enum EnumNotificationStatus {
+  Option1
+}
